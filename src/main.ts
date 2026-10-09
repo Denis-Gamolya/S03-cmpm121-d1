@@ -17,14 +17,19 @@ image.height = 96;
 let counter = 0;
 const button = document.createElement("button");
 const buttonText = document.createTextNode(String(counter));
+button.style.position = "absolute";
 button.appendChild(image);
 button.appendChild(buttonText);
 button.addEventListener("click", () => {
   counter++;
   buttonText.textContent = String(counter);
+  const x = Math.random() * document.body.clientWidth;
+  const y = Math.random() * document.body.clientHeight;
+  button.style.left = `${x}px`;
+  button.style.top = `${y}px`;
 });
 
 const message = document.createElement("p");
 message.textContent = "Your project starts here.";
 
-app.append(heading, button, message);
+app.append(heading, message, button);

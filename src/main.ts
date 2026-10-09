@@ -14,7 +14,17 @@ image.alt = "A teal tile with a cream circle";
 image.width = 96;
 image.height = 96;
 
+let counter = 0;
+const button = document.createElement("button");
+const buttonText = document.createTextNode(String(counter));
+button.appendChild(image);
+button.appendChild(buttonText);
+button.addEventListener("click", () => {
+  counter++;
+  buttonText.textContent = String(counter);
+});
+
 const message = document.createElement("p");
 message.textContent = "Your project starts here.";
 
-app.append(heading, image, message);
+app.append(heading, button, message);

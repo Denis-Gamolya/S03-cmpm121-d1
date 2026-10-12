@@ -74,7 +74,7 @@ button.addEventListener("click", (event) => {
 */
 // Radius Upgrade Button
 const upgradeRadiusButton = document.createElement("button");
-setCost(upgrades.radius);
+setCost("radius");
 updateButtonText(
   upgradeRadiusButton,
   "radius",
@@ -86,7 +86,7 @@ upgradeButtons.push(upgradeRadiusButton);
 
 // Arrow Hit Upgrade Button
 const upgradeArrowHitButton = document.createElement("button");
-setCost(upgrades.arrowHit);
+setCost("arrowHit");
 updateButtonText(
   upgradeArrowHitButton,
   "arrowHit",
@@ -98,7 +98,7 @@ upgradeButtons.push(upgradeArrowHitButton);
 
 // Lodge Score Multiplier Upgrade Button
 const upgradeLodgeScoreButton = document.createElement("button");
-setCost(upgrades.lodgeScoreMultiplier);
+setCost("lodgeScoreMultiplier");
 updateButtonText(
   upgradeLodgeScoreButton,
   "lodgeScoreMultiplier",
@@ -110,7 +110,7 @@ upgradeButtons.push(upgradeLodgeScoreButton);
 
 // Max Arrows Upgrade Button
 const upgradeMaxArrowsButton = document.createElement("button");
-setCost(upgrades.arrowCount);
+setCost("arrowCount");
 updateButtonText(
   upgradeMaxArrowsButton,
   "arrowCount",
@@ -122,7 +122,7 @@ upgradeButtons.push(upgradeMaxArrowsButton);
 
 // LodgeTime Upgrade Button
 const upgradeLodgeTimeButton = document.createElement("button");
-setCost(upgrades.lodgeTime);
+setCost("lodgeTime");
 updateButtonText(
   upgradeLodgeTimeButton,
   "lodgeTime",
@@ -208,7 +208,6 @@ function buyUpgrade(
   HTMLButton: HTMLButtonElement,
   upgradeType: keyof typeof upgrades,
 ) {
-  setCost(upgrades[upgradeType]);
   if (score < upgrades[upgradeType].cost) return;
   score -= upgrades[upgradeType].cost;
   updateScore();
@@ -231,6 +230,8 @@ function buyUpgrade(
       break;
   }
   upgrades[upgradeType].stage++;
+  setCost(upgradeType);
+  console.log(upgrades[upgradeType]);
   updateButtonText(HTMLButton, upgradeType);
 }
 
@@ -243,8 +244,8 @@ function updateButtonText(
   } \n Current Level: ${upgrades[upgrade].stat}`;
 }
 
-function setCost(object: { cost: number; stage: number }) {
-  object.cost = (5 ** object.stage) + 10;
+function setCost(object: keyof typeof upgrades) {
+  upgrades[object].cost = (5 ** upgrades[object].stage) + 10;
 }
 
 app.append(heading, scoreContainer, button, backdrop);

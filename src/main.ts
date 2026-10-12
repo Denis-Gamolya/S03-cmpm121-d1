@@ -24,7 +24,6 @@ const upgradeButtons: UpgradeButton[] = [];
 */
 // Radius Upgrade Button
 interface UpgradeButton extends HTMLButtonElement {
-  name: string;
   display: string;
   cost: number;
   stat: number;
@@ -35,7 +34,6 @@ interface UpgradeButton extends HTMLButtonElement {
 const upgradeRadiusButton = Object.assign(
   document.createElement("button") as UpgradeButton,
   {
-    name: "radius",
     display: "Board Radius",
     cost: 10,
     stat: 300,
@@ -51,7 +49,6 @@ initializeButton(upgradeRadiusButton);
 const upgradeArrowButton = Object.assign(
   document.createElement("button") as UpgradeButton,
   {
-    name: "arrowHit",
     display: "Points per Arrow",
     cost: 10,
     stat: 2,
@@ -66,7 +63,6 @@ initializeButton(upgradeArrowButton);
 const upgradeMaxArrowButton = Object.assign(
   document.createElement("button") as UpgradeButton,
   {
-    name: "maxArrows",
     display: "Max Arrows",
     cost: 10,
     stat: 1,
@@ -81,7 +77,6 @@ initializeButton(upgradeMaxArrowButton);
 const upgradeLodgedPointsButton = Object.assign(
   document.createElement("button") as UpgradeButton,
   {
-    name: "lodgeScoreMultiplier",
     display: "Lodged Score Multiplier",
     cost: 10,
     stat: 1,
@@ -96,7 +91,6 @@ initializeButton(upgradeLodgedPointsButton);
 const upgradeLodgeTimeButton = Object.assign(
   document.createElement("button") as UpgradeButton,
   {
-    name: "lodgeTime",
     display: "Lodged Time",
     cost: 10,
     stat: 1000,

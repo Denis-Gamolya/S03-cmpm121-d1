@@ -17,7 +17,7 @@ const middlePoint = {
   y: document.documentElement.clientHeight / 2,
 };
 let arrowsOnScreen = 0;
-const upgradeButtons: HTMLButtonElement[] = [];
+const upgradeButtons: UpgradeButton[] = [];
 
 /*
   UPGRADE BUTTONS
@@ -122,7 +122,7 @@ arrowButton.addEventListener("click", (event) => {
   if (arrowsOnScreen >= upgradeMaxArrowButton.stat) return;
   drawArrowAtMouse(event);
   score += upgradeArrowButton.stat;
-  scoreText.textContent = `${score.toFixed(2)}`;
+  updateScore();
   const { x, y } = getRandomPosition();
   arrowButton.style.left = `${x}px`;
   arrowButton.style.top = `${y}px`;
@@ -200,9 +200,7 @@ function updateBackdropBounds() {
   backdrop.style.left = `${middlePoint.x - backdropSize / 2}px`;
   backdrop.style.top = `${middlePoint.y - backdropSize / 2}px`;
 }
-function buyUpgrade(
-  button: UpgradeButton,
-) {
+function buyUpgrade(button: UpgradeButton) {
   if (score < button.cost) return;
   score -= button.cost;
   updateScore();
@@ -236,9 +234,7 @@ function initializeButton(button: UpgradeButton) {
   });
   upgradeButtons.push(button);
 }
-function updateButtonText(
-  button: UpgradeButton,
-) {
+function updateButtonText(button: UpgradeButton) {
   button.textContent =
     `Upgrade ${button.display} - Cost: ${button.cost} \n Current Level: ${button.stat}`;
 }

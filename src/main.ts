@@ -129,7 +129,6 @@ arrowButton.addEventListener("click", (event) => {
 });
 
 // elapsed time
-//const timer = document.createTextNode(String(0)); Comented out as it is unused
 let lastTime = 0;
 let totalTime = 0;
 function tick(timestamp: number) {

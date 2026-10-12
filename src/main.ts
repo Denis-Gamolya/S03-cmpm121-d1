@@ -29,6 +29,7 @@ interface UpgradeButton extends HTMLButtonElement {
   cost: number;
   stat: number;
   stage: number;
+  upgradeFunction?: () => void;
 }
 
 const upgradeRadiusButton = Object.assign(
@@ -39,6 +40,10 @@ const upgradeRadiusButton = Object.assign(
     cost: 10,
     stat: 300,
     stage: 1,
+    upgradeFunction: () => {
+      upgradeRadiusButton.stat *= 0.95;
+      updateBackdropBounds();
+    },
   },
 );
 initializeButton(upgradeRadiusButton);
@@ -51,6 +56,9 @@ const upgradeArrowButton = Object.assign(
     cost: 10,
     stat: 2,
     stage: 1,
+    upgradeFunction: () => {
+      upgradeArrowButton.stat *= 3;
+    },
   },
 );
 initializeButton(upgradeArrowButton);
@@ -63,6 +71,9 @@ const upgradeMaxArrowButton = Object.assign(
     cost: 10,
     stat: 1,
     stage: 1,
+    upgradeFunction: () => {
+      upgradeMaxArrowButton.stat++;
+    },
   },
 );
 initializeButton(upgradeMaxArrowButton);
@@ -75,6 +86,9 @@ const upgradeLodgedPointsButton = Object.assign(
     cost: 10,
     stat: 1,
     stage: 1,
+    upgradeFunction: () => {
+      upgradeLodgedPointsButton.stat *= 2;
+    },
   },
 );
 initializeButton(upgradeLodgedPointsButton);
@@ -87,6 +101,9 @@ const upgradeLodgeTimeButton = Object.assign(
     cost: 10,
     stat: 1000,
     stage: 1,
+    upgradeFunction: () => {
+      upgradeLodgeTimeButton.stat += 500;
+    },
   },
 );
 initializeButton(upgradeLodgeTimeButton);
@@ -203,24 +220,7 @@ function buyUpgrade(button: UpgradeButton) {
   if (score < button.cost) return;
   score -= button.cost;
   updateScore();
-  switch (button.name) {
-    case "arrowHit":
-      upgradeArrowButton.stat *= 3;
-      break;
-    case "lodgeScoreMultiplier":
-      upgradeLodgedPointsButton.stat *= 2;
-      break;
-    case "radius":
-      upgradeRadiusButton.stat *= 0.95;
-      updateBackdropBounds();
-      break;
-    case "maxArrows":
-      upgradeMaxArrowButton.stat++;
-      break;
-    case "lodgeTime":
-      upgradeLodgeTimeButton.stat += 500;
-      break;
-  }
+  if (button.upgradeFunction) button.upgradeFunction();
   button.stage++;
   setCost(button);
   updateButtonText(button);

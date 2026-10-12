@@ -6,25 +6,31 @@ import tileUrl from "./assets/tile.svg?no-inline";
 const app = document.querySelector<HTMLElement>("#app")!;
 
 const heading = document.createElement("h1");
-heading.textContent = "D1 project";
+heading.textContent = "Tap Archery";
 
+//Image Setup
 const image = document.createElement("img");
 image.src = tileUrl;
 image.alt = "A teal tile with a cream circle";
 image.width = 96;
 image.height = 96;
 
-let counter = 0;
+//Globals
+let score = 0;
+let radius = 300;
+const middlePoint = {
+  x: document.documentElement.clientWidth / 2,
+  y: document.documentElement.clientHeight / 2,
+};
+
 const button = document.createElement("button");
-const buttonText = document.createTextNode(String(counter));
+const buttonText = document.createTextNode(String(score));
 button.style.position = "absolute";
 button.appendChild(image);
-button.appendChild(buttonText);
 button.addEventListener("click", () => {
-  counter++;
-  buttonText.textContent = `${counter.toFixed(2)}`;
-  const x = Math.random() * document.body.clientWidth;
-  const y = Math.random() * document.body.clientHeight;
+  score++;
+  buttonText.textContent = `${score.toFixed(2)}`;
+  const { x, y } = getRandomPosition();
   button.style.left = `${x}px`;
   button.style.top = `${y}px`;
 });
@@ -41,8 +47,8 @@ function tick(timestamp: number) {
   const deltaTime = currentTime - lastTime;
   lastTime = currentTime;
   totalTime += deltaTime;
-  counter += deltaTime * 0.1;
-  buttonText.textContent = `${counter.toFixed(2)}`;
+  score += deltaTime * 0.1;
+  buttonText.textContent = `${score.toFixed(2)}`;
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
@@ -50,4 +56,10 @@ requestAnimationFrame(tick);
 const message = document.createElement("p");
 message.textContent = "Your project starts here.";
 
-app.append(heading, message, timer, button);
+app.append(heading, buttonText, message, timer, button);
+
+function getRandomPosition() {
+  const x = ((Math.random() - 0.5) * radius) + middlePoint.x;
+  const y = ((Math.random() - 0.5) * radius) + middlePoint.y;
+  return { x, y };
+}

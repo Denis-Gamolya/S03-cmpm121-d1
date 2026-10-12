@@ -19,19 +19,77 @@ const middlePoint = {
 let arrowsOnScreen = 0;
 const upgradeButtons: HTMLButtonElement[] = [];
 
-//Upgrade Cost Multipliers
-const upgrades = {
-  arrowHit: { display: "Points per Arrow", stage: 1, stat: 2, cost: 10 },
-  lodgeScoreMultiplier: {
-    display: "Lodged Score Multiplier",
-    stage: 1,
-    stat: 1,
+/*
+  UPGRADE BUTTONS
+*/
+// Radius Upgrade Button
+interface UpgradeButton extends HTMLButtonElement {
+  name: string;
+  display: string;
+  cost: number;
+  stat: number;
+  stage: number;
+}
+
+const upgradeRadiusButton = Object.assign(
+  document.createElement("button") as UpgradeButton,
+  {
+    name: "radius",
+    display: "Board Radius",
     cost: 10,
+    stat: 300,
+    stage: 1,
   },
-  radius: { display: "Board Radius", stage: 1, stat: 300, cost: 10 },
-  arrowCount: { display: "Max Arrows", stage: 1, stat: 1, cost: 10 },
-  lodgeTime: { display: "Lodged Time", stage: 1, stat: 1000, cost: 10 },
-};
+);
+initializeButton(upgradeRadiusButton);
+
+const upgradeArrowButton = Object.assign(
+  document.createElement("button") as UpgradeButton,
+  {
+    name: "arrowHit",
+    display: "Points per Arrow",
+    cost: 10,
+    stat: 2,
+    stage: 1,
+  },
+);
+initializeButton(upgradeArrowButton);
+
+const upgradeMaxArrowButton = Object.assign(
+  document.createElement("button") as UpgradeButton,
+  {
+    name: "maxArrows",
+    display: "Max Arrows",
+    cost: 10,
+    stat: 1,
+    stage: 1,
+  },
+);
+initializeButton(upgradeMaxArrowButton);
+
+const upgradeLodgedPointsButton = Object.assign(
+  document.createElement("button") as UpgradeButton,
+  {
+    name: "lodgeScoreMultiplier",
+    display: "Lodged Score Multiplier",
+    cost: 10,
+    stat: 1,
+    stage: 1,
+  },
+);
+initializeButton(upgradeLodgedPointsButton);
+
+const upgradeLodgeTimeButton = Object.assign(
+  document.createElement("button") as UpgradeButton,
+  {
+    name: "lodgeTime",
+    display: "Lodged Time",
+    cost: 10,
+    stat: 1000,
+    stage: 1,
+  },
+);
+initializeButton(upgradeLodgeTimeButton);
 
 //target Setup
 const target = document.createElement("img");
@@ -55,82 +113,20 @@ const scoreText = document.createTextNode(String(score));
 scoreContainer.appendChild(scoreText);
 
 //Arrow Click Button
-const button = document.createElement("button");
-button.style.position = "absolute";
-button.style.backgroundColor = "transparent";
-button.style.border = "none";
-button.appendChild(target);
-button.addEventListener("click", (event) => {
-  if (arrowsOnScreen >= upgrades.arrowCount.stat) return;
+const arrowButton = document.createElement("button");
+arrowButton.style.position = "absolute";
+arrowButton.style.backgroundColor = "transparent";
+arrowButton.style.border = "none";
+arrowButton.appendChild(target);
+arrowButton.addEventListener("click", (event) => {
+  if (arrowsOnScreen >= upgradeMaxArrowButton.stat) return;
   drawArrowAtMouse(event);
-  score += upgrades.arrowHit.stat;
+  score += upgradeArrowButton.stat;
   scoreText.textContent = `${score.toFixed(2)}`;
   const { x, y } = getRandomPosition();
-  button.style.left = `${x}px`;
-  button.style.top = `${y}px`;
+  arrowButton.style.left = `${x}px`;
+  arrowButton.style.top = `${y}px`;
 });
-/*
-  UPGRADE BUTTONS
-*/
-// Radius Upgrade Button
-const upgradeRadiusButton = document.createElement("button");
-setCost("radius");
-updateButtonText(
-  upgradeRadiusButton,
-  "radius",
-);
-upgradeRadiusButton.addEventListener("click", () => {
-  buyUpgrade(upgradeRadiusButton, "radius");
-});
-upgradeButtons.push(upgradeRadiusButton);
-
-// Arrow Hit Upgrade Button
-const upgradeArrowHitButton = document.createElement("button");
-setCost("arrowHit");
-updateButtonText(
-  upgradeArrowHitButton,
-  "arrowHit",
-);
-upgradeArrowHitButton.addEventListener("click", () => {
-  buyUpgrade(upgradeArrowHitButton, "arrowHit");
-});
-upgradeButtons.push(upgradeArrowHitButton);
-
-// Lodge Score Multiplier Upgrade Button
-const upgradeLodgeScoreButton = document.createElement("button");
-setCost("lodgeScoreMultiplier");
-updateButtonText(
-  upgradeLodgeScoreButton,
-  "lodgeScoreMultiplier",
-);
-upgradeLodgeScoreButton.addEventListener("click", () => {
-  buyUpgrade(upgradeLodgeScoreButton, "lodgeScoreMultiplier");
-});
-upgradeButtons.push(upgradeLodgeScoreButton);
-
-// Max Arrows Upgrade Button
-const upgradeMaxArrowsButton = document.createElement("button");
-setCost("arrowCount");
-updateButtonText(
-  upgradeMaxArrowsButton,
-  "arrowCount",
-);
-upgradeMaxArrowsButton.addEventListener("click", () => {
-  buyUpgrade(upgradeMaxArrowsButton, "arrowCount");
-});
-upgradeButtons.push(upgradeMaxArrowsButton);
-
-// LodgeTime Upgrade Button
-const upgradeLodgeTimeButton = document.createElement("button");
-setCost("lodgeTime");
-updateButtonText(
-  upgradeLodgeTimeButton,
-  "lodgeTime",
-);
-upgradeLodgeTimeButton.addEventListener("click", () => {
-  buyUpgrade(upgradeLodgeTimeButton, "lodgeTime");
-});
-upgradeButtons.push(upgradeLodgeTimeButton);
 
 // elapsed time
 //const timer = document.createTextNode(String(0)); Comented out as it is unused
@@ -153,9 +149,9 @@ requestAnimationFrame(tick);
 //HELPER FUNCTIONS
 function getRandomPosition() {
   const theta = Math.random() * 2 * Math.PI;
-  const x = (Math.cos(theta) * upgrades.radius.stat) + middlePoint.x -
+  const x = (Math.cos(theta) * upgradeRadiusButton.stat) + middlePoint.x -
     target.width / 2;
-  const y = (Math.sin(theta) * upgrades.radius.stat) + middlePoint.y -
+  const y = (Math.sin(theta) * upgradeRadiusButton.stat) + middlePoint.y -
     target.height / 2;
   return { x, y };
 }
@@ -185,12 +181,12 @@ function startArrowLifecycle(arrow: HTMLImageElement) {
   setTimeout(() => {
     arrowsOnScreen--;
     arrow.remove();
-  }, upgrades.lodgeTime.stat);
+  }, upgradeLodgeTimeButton.stat);
 }
 
 function addPersistentScore(deltaTime: number) {
   if (arrowsOnScreen <= 0) return;
-  score += deltaTime * 0.1 * upgrades.lodgeScoreMultiplier.stat *
+  score += deltaTime * 0.1 * upgradeLodgedPointsButton.stat *
     arrowsOnScreen;
   updateScore();
 }
@@ -198,57 +194,60 @@ function updateScore() {
   scoreText.textContent = `${score.toFixed(2)}`;
 }
 function updateBackdropBounds() {
-  const backdropSize = upgrades.radius.stat * 2 * 1.1;
+  const backdropSize = upgradeRadiusButton.stat * 2 * 1.1;
   backdrop.width = backdropSize;
   backdrop.height = backdropSize;
   backdrop.style.left = `${middlePoint.x - backdropSize / 2}px`;
   backdrop.style.top = `${middlePoint.y - backdropSize / 2}px`;
 }
 function buyUpgrade(
-  HTMLButton: HTMLButtonElement,
-  upgradeType: keyof typeof upgrades,
+  button: UpgradeButton,
 ) {
-  if (score < upgrades[upgradeType].cost) return;
-  score -= upgrades[upgradeType].cost;
+  if (score < button.cost) return;
+  score -= button.cost;
   updateScore();
-  switch (upgradeType) {
+  switch (button.name) {
     case "arrowHit":
-      upgrades.arrowHit.stat *= 3;
+      upgradeArrowButton.stat *= 3;
       break;
     case "lodgeScoreMultiplier":
-      upgrades.lodgeScoreMultiplier.stat *= 2;
+      upgradeLodgedPointsButton.stat *= 2;
       break;
     case "radius":
-      upgrades.radius.stat *= 0.95;
+      upgradeRadiusButton.stat *= 0.95;
       updateBackdropBounds();
       break;
-    case "arrowCount":
-      upgrades.arrowCount.stat++;
+    case "maxArrows":
+      upgradeMaxArrowButton.stat++;
       break;
     case "lodgeTime":
-      upgrades.lodgeTime.stat += 500;
+      upgradeLodgeTimeButton.stat += 500;
       break;
   }
-  upgrades[upgradeType].stage++;
-  setCost(upgradeType);
-  console.log(upgrades[upgradeType]);
-  updateButtonText(HTMLButton, upgradeType);
+  button.stage++;
+  setCost(button);
+  updateButtonText(button);
 }
-
+function initializeButton(button: UpgradeButton) {
+  setCost(button);
+  updateButtonText(button);
+  button.addEventListener("click", () => {
+    buyUpgrade(button);
+  });
+  upgradeButtons.push(button);
+}
 function updateButtonText(
-  Button: HTMLButtonElement,
-  upgrade: keyof typeof upgrades,
+  button: UpgradeButton,
 ) {
-  Button.textContent = `Upgrade ${upgrades[upgrade].display} - Cost: ${
-    upgrades[upgrade].cost
-  } \n Current Level: ${upgrades[upgrade].stat}`;
+  button.textContent =
+    `Upgrade ${button.display} - Cost: ${button.cost} \n Current Level: ${button.stat}`;
 }
 
-function setCost(object: keyof typeof upgrades) {
-  upgrades[object].cost = (5 ** upgrades[object].stage) + 10;
+function setCost(button: UpgradeButton) {
+  button.cost = (5 ** button.stage) + 10;
 }
 
-app.append(heading, scoreContainer, button, backdrop);
+app.append(heading, scoreContainer, arrowButton, backdrop);
 for (const upgradeButton of upgradeButtons) {
   //add a line break before each button
   const lineBreak = document.createElement("br");

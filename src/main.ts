@@ -12,8 +12,9 @@ heading.textContent = "Tap Archery";
 
 //Globals
 let score = 0;
+const UI_WIDTH = 350;
 const middlePoint = {
-  x: document.documentElement.clientWidth / 2,
+  x: UI_WIDTH + (document.documentElement.clientWidth - UI_WIDTH) / 2,
   y: document.documentElement.clientHeight / 2,
 };
 let arrowsOnScreen = 0;
@@ -129,6 +130,11 @@ arrowButton.style.position = "absolute";
 arrowButton.style.backgroundColor = "transparent";
 arrowButton.style.border = "none";
 arrowButton.appendChild(target);
+
+const initialPos = getRandomPosition();
+arrowButton.style.left = `${initialPos.x}px`;
+arrowButton.style.top = `${initialPos.y}px`;
+
 arrowButton.addEventListener("click", (event) => {
   if (arrowsOnScreen >= upgradeMaxArrowButton.stat) return;
   drawArrowAtMouse(event);
@@ -263,12 +269,19 @@ function createFadingText(x: number, y: number, amount: number) {
   }, 1000);
 }
 
-app.append(heading, scoreContainer, arrowButton, backdrop);
+// UI setup
+const uiContainer = document.createElement("div");
+uiContainer.style.width = `${UI_WIDTH}px`;
+uiContainer.style.display = "flex";
+uiContainer.style.flexDirection = "column";
+uiContainer.style.gap = "10px";
+uiContainer.style.position = "relative";
+uiContainer.style.zIndex = "5";
+uiContainer.append(heading, scoreContainer);
 for (const upgradeButton of upgradeButtons) {
-  //add a line break before each button
-  const lineBreak = document.createElement("br");
-  app.append(lineBreak);
-  app.append(upgradeButton);
+  uiContainer.append(upgradeButton);
 }
+
+app.append(uiContainer, arrowButton, backdrop);
 
 updateScore();

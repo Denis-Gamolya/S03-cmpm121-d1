@@ -27,6 +27,7 @@ The UpgradeButton interface ensures buttons hold both html elements and desired 
 - a stage, which is used to calculate cost of next purchase
 - an upgrade function, used to perform a particular upgrade. This is also unique per upgrade button.
   This interface is called on as the engine of upgrades and stat checks in the system. These buttons are set appropriately and added to a list for future traversal.
+Initially, this interface was represented as an object containing objects, but iteration and meaningful revision turned it into an interface and then moved the activation functions to the initialization.
 
 The backdrop and target are setup based on the global middlepoint, with a random location for the target determined by the radius of the backdrop - set by the upgrade button.
 

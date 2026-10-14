@@ -208,6 +208,14 @@ function addPersistentScore(deltaTime: number) {
 }
 function updateScore() {
   scoreText.textContent = `${score.toFixed(2)} Hits`;
+
+  for (const button of upgradeButtons) {
+    if (score < button.cost) {
+      button.classList.add("unaffordable");
+    } else {
+      button.classList.remove("unaffordable");
+    }
+  }
 }
 function updateBackdropBounds() {
   const backdropSize = upgradeRadiusButton.stat * 2 * 1.1;
@@ -262,3 +270,5 @@ for (const upgradeButton of upgradeButtons) {
   app.append(lineBreak);
   app.append(upgradeButton);
 }
+
+updateScore();

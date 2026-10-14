@@ -16,6 +16,16 @@ button:hover {
 button:active {
   background-color: #3e8e41;
 }
+button.unaffordable {
+  background-color: #f44336;
+  border-color: #ba000d;
+}
+button.unaffordable:hover {
+  background-color: #d32f2f;
+}
+button.unaffordable:active {
+  background-color: #b71c1c;
+}
 .game-score {
   font-size: 5rem;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

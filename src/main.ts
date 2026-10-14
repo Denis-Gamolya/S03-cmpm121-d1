@@ -120,7 +120,7 @@ backdrop.style.zIndex = "-1";
 //Score Setup
 const scoreContainer = document.createElement("span");
 scoreContainer.className = "game-score";
-const scoreText = document.createTextNode(String(score));
+const scoreText = document.createTextNode(`${score} Hits`);
 scoreContainer.appendChild(scoreText);
 
 //Arrow Click Button
@@ -134,6 +134,7 @@ arrowButton.addEventListener("click", (event) => {
   drawArrowAtMouse(event);
   score += upgradeArrowButton.stat;
   updateScore();
+  createFadingText(event.clientX, event.clientY, upgradeArrowButton.stat);
   const { x, y } = getRandomPosition();
   arrowButton.style.left = `${x}px`;
   arrowButton.style.top = `${y}px`;
@@ -176,20 +177,25 @@ function spawnArrow(x: number, y: number) {
   const arrow = document.createElement("img");
   arrow.src = arrowImage;
   arrow.style.position = "absolute";
-  arrow.inert = true; //Check this later, this may be a problem
+  arrow.inert = false; //Check this later, this may be a problem
 
   const arrowPos = { x: x - arrow.width / 2, y: y };
   arrow.style.left = `${arrowPos.x}px`;
   arrow.style.top = `${arrowPos.y}px`;
 
-  startArrowLifecycle(arrow);
+  startArrowLifecycle(arrow, arrowPos.x, arrowPos.y);
   app.appendChild(arrow);
 }
 
-function startArrowLifecycle(arrow: HTMLImageElement) {
+function startArrowLifecycle(arrow: HTMLImageElement, x: number, y: number) {
   arrowsOnScreen++;
+  const textInterval = setInterval(() => {
+    const pointsPerSecond = 0.1 * upgradeLodgedPointsButton.stat;
+    createFadingText(x, y, Number(pointsPerSecond.toFixed(2)));
+  }, 1000);
   setTimeout(() => {
     arrowsOnScreen--;
+    clearInterval(textInterval);
     arrow.remove();
   }, upgradeLodgeTimeButton.stat);
 }
@@ -201,7 +207,7 @@ function addPersistentScore(deltaTime: number) {
   updateScore();
 }
 function updateScore() {
-  scoreText.textContent = `${score.toFixed(2)}`;
+  scoreText.textContent = `${score.toFixed(2)} Hits`;
 }
 function updateBackdropBounds() {
   const backdropSize = upgradeRadiusButton.stat * 2 * 1.1;
@@ -234,6 +240,19 @@ function updateButtonText(button: UpgradeButton) {
 
 function setCost(button: UpgradeButton) {
   button.cost = (5 ** button.stage) + 10;
+}
+
+function createFadingText(x: number, y: number, amount: number) {
+  const text = document.createElement("div");
+  text.className = "fading-text";
+  text.textContent = `+${amount}`;
+  text.style.left = `${x}px`;
+  text.style.top = `${y}px`;
+
+  app.append(text);
+  setTimeout(() => {
+    text.remove();
+  }, 1000);
 }
 
 app.append(heading, scoreContainer, arrowButton, backdrop);

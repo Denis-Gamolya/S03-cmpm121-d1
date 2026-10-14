@@ -196,9 +196,10 @@ function spawnArrow(x: number, y: number) {
 function startArrowLifecycle(arrow: HTMLImageElement, x: number, y: number) {
   arrowsOnScreen++;
   const textInterval = setInterval(() => {
-    const pointsPerSecond = 0.1 * upgradeLodgedPointsButton.stat;
+    const pointsPerSecond = upgradeLodgeTimeButton.stat *
+      upgradeLodgedPointsButton.stat / 10000;
     createFadingText(x, y, Number(pointsPerSecond.toFixed(2)));
-  }, 1000);
+  }, upgradeLodgeTimeButton.stat);
   setTimeout(() => {
     arrowsOnScreen--;
     clearInterval(textInterval);
@@ -233,11 +234,11 @@ function updateBackdropBounds() {
 function buyUpgrade(button: UpgradeButton) {
   if (score < button.cost) return;
   score -= button.cost;
-  updateScore();
   if (button.upgradeFunction) button.upgradeFunction();
   button.stage++;
   setCost(button);
   updateButtonText(button);
+  updateScore();
 }
 function initializeButton(button: UpgradeButton) {
   setCost(button);

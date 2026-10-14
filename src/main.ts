@@ -12,7 +12,7 @@ heading.textContent = "Tap Archery";
 
 //Globals
 let score = 0;
-const UI_WIDTH = 350;
+const UI_WIDTH = 450;
 const middlePoint = {
   x: UI_WIDTH + (document.documentElement.clientWidth - UI_WIDTH) / 2,
   y: document.documentElement.clientHeight / 2,

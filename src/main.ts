@@ -135,9 +135,16 @@ const initialPos = getRandomPosition();
 arrowButton.style.left = `${initialPos.x}px`;
 arrowButton.style.top = `${initialPos.y}px`;
 
+const arrowSound = new Audio(
+  "src/assets/trimmed-dragon-studio-thud-sound-effect-405470.mp3",
+);
+
 arrowButton.addEventListener("click", (event) => {
   if (arrowsOnScreen >= upgradeMaxArrowButton.stat) return;
   drawArrowAtMouse(event);
+  // added a sound effect to play each time an arrow is shot
+  arrowSound.currentTime = 0;
+  arrowSound.play();
   score += upgradeArrowButton.stat;
   updateScore();
   createFadingText(event.clientX, event.clientY, upgradeArrowButton.stat);
